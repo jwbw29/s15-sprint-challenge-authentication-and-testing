@@ -50,7 +50,17 @@ router.post("/register", (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
-  router.post("/login");
+  const { username, password } = req.body;
+
+  if (bcrypt.compareSync(password, req.user.password)) {
+    const token = buildToken(req.user);
+    res.status(200).json({
+      message: `Welcome, ${username}`, //or req.user.username
+      token,
+    });
+  } else {
+    next({ status: 401, message: "Invalid Credentials" });
+  }
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -75,5 +85,16 @@ router.post("/login", (req, res, next) => {
       the response body should include a string exactly as follows: "invalid credentials".
   */
 });
+
+function buildToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username,
+  };
+  const options = {
+    expiresIn: "1d",
+  };
+  return jwt.sign(payload, JWT_SECRET, options);
+}
 
 module.exports = router;
