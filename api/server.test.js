@@ -22,36 +22,54 @@ beforeEach(async () => {
 describe("[GET] /api/jokes", () => {
   let token;
   beforeAll(async () => {
-    const res = await request(server)
+    await request(server)
+      .post("/api/auth/register")
+      .send({ username: "foo", password: "1234" });
+
+    const loginRes = await request(server)
       .post("/api/auth/login")
       .send({ username: "foo", password: "1234" });
 
-    token = res.body.token;
+    token = loginRes.body.token;
   });
 
-  test("returns a 200 OK status code", async () => {
-    const response = await request(server)
+  test("(1) returns a 200 OK status code", async () => {
+    const res = await request(server)
       .get("/api/jokes")
       .set("Authorization", token);
 
-    expect(response.status).toBe(200);
+    expect(res.status).toBe(200);
   });
 
-  test("returns a JSON object", async () => {
-    const response = await request(server)
+  test("(2) returns a JSON object", async () => {
+    const res = await request(server)
       .get("/api/jokes")
-      .set("Authorization", "Bearer your_token_here");
+      .set("Authorization", token);
 
-    expect(response.type).toBe("application/json");
+    expect(res.type).toMatch(/json/i);
   });
 });
 
 describe("[POST] /api/auth/register", () => {
-  test.todo("returns a 201 OK status code");
-  test.todo("returns a JSON object");
+  test("(3) returns a 201 OK status code", () => {
+    return request(server)
+      .post("/api/auth/register")
+      .send({ username: "foo", password: "1234" })
+      .then((res) => {
+        expect(res.status).toBe(201);
+      });
+  });
+  test("(4) returns a JSON object", () => {
+    return request(server)
+      .post("/api/auth/register")
+      .send({ username: "foo", password: "1234" })
+      .then((res) => {
+        expect(res.type).toMatch(/json/i);
+      });
+  });
 });
 
 describe("[POST] /api/auth/login", () => {
-  test.todo("returns a 200 OK status code");
-  test.todo("Welcome, ${username}");
+  test.todo("(5) returns a 200 OK status code");
+  test.todo("(6) Welcome, ${username}");
 });
