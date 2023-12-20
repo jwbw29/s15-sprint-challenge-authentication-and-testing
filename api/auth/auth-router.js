@@ -15,11 +15,25 @@ router.get("/users", (req, res, next) => {
 
 router.post("/register", (req, res, next) => {
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: "username and password required" });
+  }
+
   const hash = bcrypt.hashSync(password, 8);
 
-  Users.add({ username, password: hash })
+  Users.findBy({ username })
+    .then((users) => {
+      if (users.length) {
+        res.status(400).json({ message: "username taken" });
+      } else {
+        return Users.add({ username, password: hash });
+      }
+    })
     .then((newUser) => {
-      res.status(201).json(newUser);
+      if (newUser) {
+        res.status(201).json(newUser);
+      }
     })
     .catch(next);
   /*
