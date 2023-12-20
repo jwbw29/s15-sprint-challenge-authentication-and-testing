@@ -2,10 +2,20 @@ const request = require("supertest");
 const server = require("./server.js");
 const db = require("../data/dbConfig.js");
 
-// Write your tests here
 test("sanity", () => {
   expect(true).toBe(true);
 });
+
+beforeAll(async () => {
+  await db.migrate.rollback();
+  await db.migrate.latest();
+});
+
+beforeEach(async () => {
+  await db.seed.run();
+});
+
+// Write your tests here
 
 //// A minimum of 2 tests per API endpoint ////
 
