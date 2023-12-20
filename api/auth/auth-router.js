@@ -67,7 +67,7 @@ router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ message: "Invalid credentials" });
+    return res.status(400).json({ message: "username and password required" });
   }
 
   // Fetch the user from the database
