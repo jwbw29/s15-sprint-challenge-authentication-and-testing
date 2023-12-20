@@ -10,7 +10,7 @@
 
 <!-- - Fork, clone, and `npm install`.
     [x] Build your database executing `npm run migrate`.
-    [ ] Run tests locally executing `npm test`. -->
+    [x] Run tests locally executing `npm test`. -->
 
 ## Project Instructions
 
