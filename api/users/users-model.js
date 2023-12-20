@@ -4,8 +4,8 @@ function find() {
   return db("users");
 }
 
-function findBy(id) {
-  return db("users").where("id", id).first();
+function findBy(filter) {
+  return db("users").where(filter).orderBy("id");
 }
 
 async function add(user) {
