@@ -70,6 +70,28 @@ describe("[POST] /api/auth/register", () => {
 });
 
 describe("[POST] /api/auth/login", () => {
-  test.todo("(5) returns a 200 OK status code");
-  test.todo("(6) Welcome, ${username}");
+  test("(5) returns a 200 OK status code", async () => {
+    await request(server)
+      .post("/api/auth/register")
+      .send({ username: "foo", password: "1234" });
+
+    return await request(server)
+      .post("/api/auth/login")
+      .send({ username: "foo", password: "1234" })
+      .then((res) => {
+        expect(res.status).toBe(200);
+      });
+  });
+  test("(6) Welcome, ${username}", async () => {
+    await request(server)
+      .post("/api/auth/register")
+      .send({ username: "foo", password: "1234" });
+
+    return await request(server)
+      .post("/api/auth/login")
+      .send({ username: "foo", password: "1234" })
+      .then((res) => {
+        expect(res.body.message).toBe("Welcome, foo");
+      });
+  });
 });
