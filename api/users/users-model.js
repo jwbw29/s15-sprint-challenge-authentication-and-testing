@@ -10,7 +10,7 @@ function findBy(filter) {
 
 async function add(user) {
   const [id] = await db("users").insert(user, ["id"]);
-  return findBy({ id });
+  return findBy({ id }).first();
 }
 
 module.exports = {
